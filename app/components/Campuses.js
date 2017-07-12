@@ -1,0 +1,29 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import {connect} from 'react-redux';
+
+function Campus(props) {
+	const campuses = props.campuses;
+	console.log('props', props);
+	console.log('image', campuses);
+	return (
+		<div>
+			{
+				// map over our campses and display an image with the name of each campus with a link to the single view
+				campuses && campuses.map(campus => {
+					return (
+						<div key={campus.id}>
+							<img src={campus.image} />
+							<Link to={`/campuses/${campus.id}`}>{campus.name}</Link>
+						</div>
+					);
+				})
+			}
+		</div>
+	);
+}
+
+// Put campuses on the props
+const mapStateToProps = state => ({campuses: state.campuses});
+
+export default connect(mapStateToProps)(Campus);

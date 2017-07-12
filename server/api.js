@@ -12,10 +12,9 @@ api.get('/hello', (req, res) => res.send({ hello: 'world' }));
 
 // get all campuses
 api.get('/campuses', (req, res, next) => {
-	console.log(db.models);
 	Campus.findAll()
 		.then(campuses => {
-			res.json({ campuses });
+			res.json(campuses);
 		})
 		.catch(next);
 });
@@ -24,7 +23,7 @@ api.get('/campuses', (req, res, next) => {
 api.post('/campuses', (req, res, next) => {
 	Campus.create(req.body)
 		.then(newCampus => {
-			res.json({ newCampus });
+			res.json(newCampus);
 		})
 		.catch(next);
 });
@@ -37,7 +36,7 @@ api.put('/campuses', (req, res, next) => {
 		}
 	})
 		.then(campus => {
-			if (campus[0] > 0) res.json({ campus });
+			if (campus[0] > 0) res.json(campus);
 			else throw new Error('Invalid campus id');
 		})
 		.catch(next);
@@ -62,7 +61,7 @@ api.delete('/campuses', (req, res, next) => {
 api.get('campuses/:id', (req, res, next) => {
 	Campus.findById(req.params.id)
 		.then(campus => {
-			res.json({ campus });
+			res.json(campus);
 		})
 		.catch(next);
 });
@@ -72,7 +71,7 @@ api.get('campuses/:id', (req, res, next) => {
 api.get('/students', (req, res, next) => {
 	Student.findAll()
 		.then(students => {
-			res.json({ students });
+			res.json(students);
 		})
 		.catch(next);
 });
@@ -81,7 +80,7 @@ api.get('/students', (req, res, next) => {
 api.post('/students', (req, res, next) => {
 	Student.create(req.body)
 		.then(newStudent => {
-			res.json({ newStudent });
+			res.json(newStudent);
 		})
 		.catch(next);
 });
@@ -94,7 +93,7 @@ api.put('/students', (req, res, next) => {
 		}
 	})
 		.then(student => {
-			if (student[0] > 0) res.json({ student });
+			if (student[0] > 0) res.json(student);
 			else throw new Error('Invalid student id');
 		})
 		.catch(next);
@@ -118,7 +117,7 @@ api.delete('/students', (req, res, next) => {
 api.get('students/:id', (req, res, next) => {
 	Student.findById(req.params.id)
 		.then(student => {
-			res.json({ student });
+			res.json(student);
 		})
 		.catch(next);
 });
