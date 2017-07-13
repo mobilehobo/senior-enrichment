@@ -19,6 +19,8 @@ export const getOneStudent = id => dispatch => {
 		.catch(err => console.error(err));
 };
 
+export const setStudents = students => dispatch => dispatch(gotStudents(students));
+
 // REDUCER
 export default function studentReducer(state = [], action) {
 	switch (action.type) {

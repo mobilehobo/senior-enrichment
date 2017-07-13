@@ -14,8 +14,12 @@ export const getAllCampuses = () => dispatch => {
 };
 
 export const getOneCampus = id => dispatch => {
+	console.log('to thunk');
 	return axios.get(`/api/campuses/${id}`)
-		.then(res => dispatch(gotCampuses(res.data))) // dispatch our action with the data, avoids chaining an additional promise
+		.then(res => {
+			console.log('thunk data', res.data);
+			dispatch(gotCampuses(res.data));
+		}) // dispatch our action with the data, avoids chaining an additional promise
 		.catch(err => console.error(err));
 };
 

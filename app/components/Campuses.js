@@ -11,7 +11,7 @@ function Campus(props) {
 				campuses && campuses.map(campus => {
 					return (
 						<div key={campus.id}>
-							<Link to={`/campuses/${campus.id}`}><img src={campus.image} /></Link>
+							<Link to={`/campuses/${campus.id}`}><img src={campus.image} alt={campus.name} /></Link>
 						</div>
 					);
 				})

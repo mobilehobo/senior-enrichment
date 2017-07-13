@@ -20,8 +20,8 @@ class Routes extends Component {
 		return (
 			<Router>
 				<Switch>
-					<Route path="/campuses/:id" Component={SingleCampus} />
-					<Route path="/campuses" component={Campuses} />
+					<Route exact path="/campuses" component={Campuses} />
+					<Route path="/campuses/:id" component={SingleCampus} />
 					<Route path="/students" component={Students} />
 					<Route path="/" component={Home} />
 				</Switch>
