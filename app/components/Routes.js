@@ -1,3 +1,4 @@
+/* eslint class-methods-use-this: 0 */
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -20,10 +21,11 @@ class Routes extends Component {
 		return (
 			<Router>
 				<Switch>
+					<Route exact path="/" component={Home} />
 					<Route exact path="/campuses" component={Campuses} />
 					<Route path="/campuses/:id" component={SingleCampus} />
-					<Route path="/students" component={Students} />
-					<Route path="/" component={Home} />
+					<Route exact path="/students" component={Students} />
+					<Route path="/students/:id" component={SingleStudent} />
 				</Switch>
 			</Router>);
 	}
@@ -35,4 +37,4 @@ const mapStateToProps = null;
 // import the thunks to get campuses and students on mount
 const mapDispatchToProps = { getAllCampuses, getAllStudents };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Routes); // export our RoutesContainer
+export default connect(mapStateToProps, mapDispatchToProps)(Routes); // export our Container
