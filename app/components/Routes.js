@@ -20,6 +20,7 @@ class Routes extends Component {
 		return (
 			<Router>
 				<Switch>
+					<Route path="/campuses/:id" Component={SingleCampus} />
 					<Route path="/campuses" component={Campuses} />
 					<Route path="/students" component={Students} />
 					<Route path="/" component={Home} />
@@ -27,8 +28,6 @@ class Routes extends Component {
 			</Router>);
 	}
 }
-
-//<Route path="/campuses/:id" Component={SingleCampus} />
 
 // don't need any props here for now
 const mapStateToProps = null;

@@ -1,3 +1,4 @@
+/* eslint new-cap: 0 */
 'use strict';
 const api = require('express').Router();
 
@@ -33,7 +34,13 @@ api.put('/campuses', (req, res, next) => {
 	Campus.update(req.body, {
 		where: {
 			id: req.body.id
-		}
+		},
+		include: [
+			{
+				model: Student,
+				where: { id: Student.campusId }
+			}
+		]
 	})
 		.then(campus => {
 			if (campus[0] > 0) res.json(campus);
@@ -58,7 +65,8 @@ api.delete('/campuses', (req, res, next) => {
 });
 
 // get one campus by its id
-api.get('campuses/:id', (req, res, next) => {
+api.get('/campuses/:id', (req, res, next) => {
+	console.log('i be here');
 	Campus.findById(req.params.id)
 		.then(campus => {
 			res.json(campus);
@@ -66,6 +74,13 @@ api.get('campuses/:id', (req, res, next) => {
 		.catch(next);
 });
 
+// api.get('/campuses/:id/students', (req, res, next) => {
+// 	Campus.scope('activeStudents').findAll()
+// 		.then(students => {
+// 			res.json(students);
+// 		})
+// 		.catch(next);
+// });
 
 // get all students
 api.get('/students', (req, res, next) => {
@@ -114,7 +129,7 @@ api.delete('/students', (req, res, next) => {
 });
 
 // get one student by their id
-api.get('students/:id', (req, res, next) => {
+api.get('/students/:id', (req, res, next) => {
 	Student.findById(req.params.id)
 		.then(student => {
 			res.json(student);

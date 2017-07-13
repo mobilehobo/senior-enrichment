@@ -11,8 +11,10 @@ const Campus = require('./Campus');
 
 Campus.hasMany(Student, {
 	foreignKey: 'campusId',
-	onDelete: 'cascade',
+	onDelete: 'cascade',  // delete all students associated with the campus as well
 	hooks: true
 });
+
+Student.belongsTo(Campus, { as: 'campus' });
 
 module.exports = { User, Student, Campus };
