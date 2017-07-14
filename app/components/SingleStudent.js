@@ -22,8 +22,11 @@ function SingleStudent(props) {
 const mapStateToProps = (state, ownProps) => {
 	const studentId = +ownProps.match.params.id; // make sure it's a number, else _.find won't find anything
 	return {
-		students: state.students, // to prevent no data from being available if going directly here
-		student: _.find(state.students, student => student.id === studentId) // find a singluar student on our state and pass it in
+		// to prevent no data from being available if going directly here
+		students: state.students,
+
+		// find a singluar student on our state and pass it in to props
+		student: _.find(state.students, student => student.id === studentId)
 	};
 };
 

@@ -10,8 +10,8 @@ const studentRouter = require('./studentRouter');
 // Ideally you would have something to handle this, so if you have time try that out!
 api.get('/hello', (req, res) => res.send({ hello: 'world' }));
 
-api.use(campusRouter);
+api.use('/campuses', campusRouter);
 
-api.use(studentRouter);
+api.use('/students', studentRouter);
 
 module.exports = api;
