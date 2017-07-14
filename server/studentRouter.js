@@ -24,10 +24,10 @@ router.post('/', (req, res, next) => {
 });
 
 // update a student
-router.put('/', (req, res, next) => {
+router.put('/:id', (req, res, next) => {
 	Student.update(req.body, {
 		where: {
-			id: req.body.id
+			id: req.params.id
 		}
 	})
 		.then(student => {

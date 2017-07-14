@@ -8,8 +8,8 @@ import Loading from './Loading';
 function SingleCampus(props) {
 	const campus = props.campus;
 
-	if (!campus) return <Loading />; // if stuff is still loading
-	const students = campus.students;
+	if (!campus) return <Loading />; // if stuff is still loading, to prevent errors with accessing properties of undefined
+	const students = campus.students || [];
 
 	return (
 		<div>

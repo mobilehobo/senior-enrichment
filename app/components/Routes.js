@@ -27,7 +27,8 @@ class Routes extends Component {
 					<Route exact path="/students" component={Students} />
 					<Route path="/students/:id" component={SingleStudent} />
 				</Switch>
-			</Router>);
+			</Router>
+		);
 	}
 }
 

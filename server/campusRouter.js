@@ -24,10 +24,10 @@ router.post('/', (req, res, next) => {
 });
 
 // update a campus
-router.put('/', (req, res, next) => {
+router.put('/:id', (req, res, next) => {
 	Campus.update(req.body, {
 		where: {
-			id: req.body.id
+			id: req.params.id
 		}
 	})
 		.then(campus => {
@@ -41,11 +41,10 @@ router.put('/', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
 	Campus.destroy({
 		where: {
-			id: req.body.id
+			id: req.params.id
 		}
 	})
 		.then(result => {
-			console.log(result);
 			if (result > 0) res.end();
 			else throw new Error('Invalid campus id');
 		})

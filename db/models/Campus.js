@@ -13,6 +13,7 @@ module.exports = db.define('campus', {
 	},
 	image: {
 		type: Sequelize.STRING,
+		allowNull: false,
 		validate: {
 			notEmpty: true
 		}
