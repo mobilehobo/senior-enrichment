@@ -12,9 +12,13 @@ const Campus = require('./Campus');
 Campus.hasMany(Student, {
 	foreignKey: 'campusId',
 	onDelete: 'cascade',  // delete all students associated with the campus as well
-	hooks: true
+	hooks: true // makes cascade actually work
 });
 
-Student.belongsTo(Campus, { as: 'campus' });
+Student.belongsTo(Campus, {
+	as: 'campus',
+	onUpdate: 'cascade',
+	hooks: true
+});
 
 module.exports = { User, Student, Campus };

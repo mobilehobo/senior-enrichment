@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import Home from './Home';
 import Campuses from './Campuses';
@@ -17,23 +18,32 @@ class Routes extends Component {
 		this.props.getAllStudents();
 	}
 
+	componentWillUpdate(newProps) {
+		if (!_.isEqual(newProps.campuses, this.props.campuses) || !_.isEqual(newProps.students, this.props.students)) {
+			this.props.getAllCampuses();
+			this.props.getAllStudents();
+		}
+	}
+
 	render() {
 		return (
 			<Router>
-				<Switch>
-					<Route exact path="/" component={Home} />
-					<Route exact path="/campuses" component={Campuses} />
-					<Route path="/campuses/:id" component={SingleCampus} />
-					<Route exact path="/students" component={Students} />
-					<Route path="/students/:id" component={SingleStudent} />
-				</Switch>
+				<main>
+					<Home />
+					<hr />
+					<Switch>
+						<Route exact path="/campuses" component={Campuses} />
+						<Route path="/campuses/:id" component={SingleCampus} />
+						<Route exact path="/students" component={Students} />
+						<Route path="/students/:id" component={SingleStudent} />
+					</Switch>
+				</main>
 			</Router>
 		);
 	}
 }
 
-// don't need any props here for now
-const mapStateToProps = null;
+const mapStateToProps = state => ({ students: state.students, campuses: state.campuses });
 
 // import the thunks to get campuses and students on mount
 const mapDispatchToProps = { getAllCampuses, getAllStudents };

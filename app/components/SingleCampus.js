@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import Loading from './Loading';
+import CampusForm from './CampusForm';
+import AddToCampusForm from './AddToCampusForm';
+import { removeFromCampus } from '../reducers';
 
 function SingleCampus(props) {
 	const campus = props.campus;
@@ -23,11 +26,16 @@ function SingleCampus(props) {
 						return (
 							<li key={student.id}>
 								<Link to={`/students/${student.id}`}>{student.name}</Link>
+								<button
+									onClick={() => props.removeFromCampus(student)}
+								>Remove From Campus</button>
 							</li>
 						);
 					})
 				}
 			</ul>
+			<AddToCampusForm campus={campus} />
+			<CampusForm campus={campus} />
 		</div>
 	);
 }
@@ -41,4 +49,6 @@ const mapStateToProps = (state, ownProps) => {
 	};
 };
 
-export default connect(mapStateToProps)(SingleCampus);
+const mapDispatchToProps = { removeFromCampus };
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleCampus);

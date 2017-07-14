@@ -28,10 +28,12 @@ router.put('/:id', (req, res, next) => {
 	Student.update(req.body, {
 		where: {
 			id: req.params.id
-		}
+		},
+		returning: true,
+		plain: true
 	})
 		.then(student => {
-			if (student[0] > 0) res.json(student);
+			if (student[1]) res.json(student[1].dataValues);
 			else throw new Error('Invalid student id');
 		})
 		.catch(next);

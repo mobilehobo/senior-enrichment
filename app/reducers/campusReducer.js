@@ -3,11 +3,13 @@ import axios from 'axios';
 // ACTIONS
 const GOT_CAMPUSES = 'GOT_CAMPUSES';
 const ADD_CAMPUS = 'ADD_CAMPUS';
+const UPDATE_CAMPUS = 'UPDATE_CAMPUS';
 const DELETE_CAMPUS = 'DELETE_CAMPUS';
 
 // ACION CREATORS
 const gotCampuses = campuses => ({ type: GOT_CAMPUSES, campuses });
 const addCampus = campus => ({ type: ADD_CAMPUS, campus });
+const updateCampus = campus => ({ type: UPDATE_CAMPUS, campus });
 const deleteCampus = campusId => ({ type: DELETE_CAMPUS, campusId });
 
 // THUNKS
@@ -27,10 +29,17 @@ export const getOneCampus = id => dispatch => {
 		.catch(err => console.error(err));
 };
 
-export const submitCampus = campus => dispatch => {
-	return axios.post('/api/campuses', campus)
-		.then(res => dispatch(addCampus(res.data)))
-		.catch(err => console.error(err));
+export const submitCampus = (id, campus) => dispatch => {
+	if (id) {
+		return axios.put(`/api/campuses/${id}`, campus)
+			.then(() => dispatch(updateCampus(campus)))
+			.catch(err => console.error(err));
+	}
+	else {
+		return axios.post('/api/campuses', campus)
+			.then(res => dispatch(addCampus(res.data)))
+			.catch(err => console.error(err));
+	}
 };
 
 export const removeCampus = campusId => dispatch => {
@@ -46,6 +55,10 @@ export default function campusReducer(state = [], action) {
 			return action.campuses;
 		case ADD_CAMPUS:
 			return [...state, action.campus];
+		case UPDATE_CAMPUS:
+			return state.map(campus => {
+				return campus.id === action.campus.id ? action.campus : campus;
+			});
 		case DELETE_CAMPUS:
 			return state.filter(campus => campus.id !== action.campusId);
 		default:

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Loading from './Loading';
+import StudentForm from './StudentForm';
 import { removeStudent } from '../reducers';
 
 function Students(props) {
@@ -24,6 +25,7 @@ function Students(props) {
 					);
 				})
 			}
+			<StudentForm create="true" />
 		</div>
 	);
 }

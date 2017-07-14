@@ -2,11 +2,13 @@ import axios from 'axios';
 
 // ACTIONS
 const GOT_STUDENTS = 'GOT_STUDENTS';
+const CREATE_STUDENT = 'CREATE_STUDENT';
 const UPDATE_STUDENT = 'UPDATE_STUDENT';
 const DELETE_STUDENT = 'DELETE_STUDENT';
 
 // ACION CREATORS
 const gotStudents = students => ({ type: GOT_STUDENTS, students });
+const createStudent = student => ({ type: CREATE_STUDENT, student });
 const updateStudent = student => ({ type: UPDATE_STUDENT, student });
 const deleteStudent = studentId => ({ type: DELETE_STUDENT, studentId });
 
@@ -24,7 +26,27 @@ export const getOneStudent = id => dispatch => {
 };
 
 export const submitStudent = (id, student) => dispatch => {
-	return axios.put(`/api/students/${id}`, student)
+	if (id) {
+		return axios.put(`/api/students/${id}`, student)
+			.then(() => dispatch(updateStudent(student)))
+			.catch(err => console.error(err));
+	}
+	else {
+		return axios.post('/api/students', student)
+			.then(res => dispatch(createStudent(res.data)))
+			.catch(err => console.error(err));
+	}
+};
+
+export const addToCampus = (campusId, studentId) => dispatch => {
+	return axios.put(`/api/students/${studentId}`, {campusId})
+		.then(res => dispatch(updateStudent(res.data)))
+		.catch(err => console.error(err));
+};
+
+export const removeFromCampus = student => dispatch => {
+	student.campusId = null;
+	return axios.put(`/api/students/${student.id}`, student)
 		.then(() => dispatch(updateStudent(student)))
 		.catch(err => console.error(err));
 };
@@ -40,6 +62,8 @@ export default function studentReducer(students = [], action) {
 	switch (action.type) {
 		case GOT_STUDENTS:
 			return action.students;
+		case CREATE_STUDENT:
+			return [...students, action.student];
 		case UPDATE_STUDENT:
 			// map over current arrway and replace student with new data if id matches
 			return students.map(student => {
