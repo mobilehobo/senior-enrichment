@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Loading from './Loading';
-import { submitStudent } from '../reducers';
+import { submitStudent, addToCampus, removeFromCampus } from '../reducers';
 
 class StudentForm extends React.Component {
 	constructor(props) {
@@ -48,19 +48,26 @@ class StudentForm extends React.Component {
 		event.preventDefault();
 		const name = event.target.studentName.value;
 		const email = event.target.studentEmail.value;
-		const campusId = event.target.studentCampus.value;
+		const campusId = +event.target.studentCampus.value;
 
 		const student = {
 			name,
 			email,
 			campusId
 		};
-		let id;
-		if (this.props.create) id = null;
-		else id = this.props.student.id;
 
-		this.props.submitStudent(id, student); // pass in null if we're creating a student
-		if (!this.props.create) {
+		let create = false;
+		if (this.props.create) create = true;
+		else student.id = this.props.student.id;
+
+		if (this.props.student.campusId !== campusId && !this.props.create) {
+			this.props.addToCampus(campusId, student.id);
+		}
+		else {
+			this.props.submitStudent(student, create); // pass in null if we're creating a student
+		}
+
+		if (this.props.create) {
 			event.target.studentName.value = '';
 			event.target.studentEmail.value = '';
 			event.target.studentCampus.value = '';
@@ -70,6 +77,6 @@ class StudentForm extends React.Component {
 
 const mapStateToProps = state => ({ campuses: state.campuses });
 
-const mapDispatchToProps = { submitStudent };
+const mapDispatchToProps = { submitStudent, addToCampus };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentForm);

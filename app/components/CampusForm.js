@@ -40,12 +40,12 @@ class CampusForm extends React.Component {
 			name,
 			image
 		};
-		let id;
-		if (this.props.create) id = null;
-		else id = this.props.campus.id;
+		let create = false;
+		if (this.props.create) create = true;
+		else campus.id = this.props.campus.id;
 
-		this.props.submitCampus(id, campus); // pass in null if we're creating a campus
-		if (!this.props.create) {
+		this.props.submitCampus(campus, create); // pass in null if we're creating a campus
+		if (this.props.create) {
 			event.target.campusName.value = '';
 			event.target.campusImage.value = '';
 		}

@@ -1,16 +1,11 @@
 import axios from 'axios';
+import _ from 'lodash';
 
-// ACTIONS
-const GOT_CAMPUSES = 'GOT_CAMPUSES';
-const ADD_CAMPUS = 'ADD_CAMPUS';
-const UPDATE_CAMPUS = 'UPDATE_CAMPUS';
-const DELETE_CAMPUS = 'DELETE_CAMPUS';
-
-// ACION CREATORS
-const gotCampuses = campuses => ({ type: GOT_CAMPUSES, campuses });
-const addCampus = campus => ({ type: ADD_CAMPUS, campus });
-const updateCampus = campus => ({ type: UPDATE_CAMPUS, campus });
-const deleteCampus = campusId => ({ type: DELETE_CAMPUS, campusId });
+import {
+	GOT_CAMPUSES, CREATE_CAMPUS, UPDATE_CAMPUS, DELETE_CAMPUS
+	, gotCampuses, createCampus, updateCampus, deleteCampus
+} from './campusActions';
+import { ADD_STUDENT_TO_CAMPUS, REMOVE_STUDENT_FROM_CAMPUS } from './studentActions';
 
 // THUNKS
 export const getAllCampuses = () => dispatch => {
@@ -29,15 +24,15 @@ export const getOneCampus = id => dispatch => {
 		.catch(err => console.error(err));
 };
 
-export const submitCampus = (id, campus) => dispatch => {
-	if (id) {
-		return axios.put(`/api/campuses/${id}`, campus)
+export const submitCampus = (campus, create) => dispatch => {
+	if (!create) {
+		return axios.put(`/api/campuses/${campus.id}`, campus)
 			.then(() => dispatch(updateCampus(campus)))
 			.catch(err => console.error(err));
 	}
 	else {
 		return axios.post('/api/campuses', campus)
-			.then(res => dispatch(addCampus(res.data)))
+			.then(res => dispatch(createCampus(res.data)))
 			.catch(err => console.error(err));
 	}
 };
@@ -50,17 +45,36 @@ export const removeCampus = campusId => dispatch => {
 
 // REDUCER
 export default function campusReducer(state = [], action) {
+	const newState = [...state];
+	const campusToChange = _.find(newState, campus => campus.id === action.campusId);
+
 	switch (action.type) {
 		case GOT_CAMPUSES:
 			return action.campuses;
-		case ADD_CAMPUS:
+
+		case CREATE_CAMPUS:
 			return [...state, action.campus];
+
 		case UPDATE_CAMPUS:
 			return state.map(campus => {
 				return campus.id === action.campus.id ? action.campus : campus;
 			});
+
+		case ADD_STUDENT_TO_CAMPUS:
+			campusToChange.students = [...campusToChange.students, action.student];
+			return newState.map(campus => {
+				return campus.id === campusToChange.id ? campusToChange : campus;
+			});
+
+		case REMOVE_STUDENT_FROM_CAMPUS:
+			campusToChange.students = campusToChange.students.filter(student => student.id !== action.studentId);
+			return newState.map(campus => {
+				return campus.id === campusToChange.id ? campusToChange : campus;
+			});
+
 		case DELETE_CAMPUS:
 			return state.filter(campus => campus.id !== action.campusId);
+
 		default:
 			return state;
 	}

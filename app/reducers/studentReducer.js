@@ -1,16 +1,9 @@
 import axios from 'axios';
 
-// ACTIONS
-const GOT_STUDENTS = 'GOT_STUDENTS';
-const CREATE_STUDENT = 'CREATE_STUDENT';
-const UPDATE_STUDENT = 'UPDATE_STUDENT';
-const DELETE_STUDENT = 'DELETE_STUDENT';
-
-// ACION CREATORS
-const gotStudents = students => ({ type: GOT_STUDENTS, students });
-const createStudent = student => ({ type: CREATE_STUDENT, student });
-const updateStudent = student => ({ type: UPDATE_STUDENT, student });
-const deleteStudent = studentId => ({ type: DELETE_STUDENT, studentId });
+import {
+	GOT_STUDENTS, CREATE_STUDENT, UPDATE_STUDENT, DELETE_STUDENT
+	, gotStudents, createStudent, updateStudent, deleteStudent, addStudentToCampus, removeStudentFromCampus
+} from './studentActions';
 
 // THUNKS
 export const getAllStudents = () => dispatch => {
@@ -25,9 +18,9 @@ export const getOneStudent = id => dispatch => {
 		.catch(err => console.error(err));
 };
 
-export const submitStudent = (id, student) => dispatch => {
-	if (id) {
-		return axios.put(`/api/students/${id}`, student)
+export const submitStudent = (student, create) => dispatch => {
+	if (!create) {
+		return axios.put(`/api/students/${student.id}`, student)
 			.then(() => dispatch(updateStudent(student)))
 			.catch(err => console.error(err));
 	}
@@ -39,15 +32,22 @@ export const submitStudent = (id, student) => dispatch => {
 };
 
 export const addToCampus = (campusId, studentId) => dispatch => {
-	return axios.put(`/api/students/${studentId}`, {campusId})
-		.then(res => dispatch(updateStudent(res.data)))
+	return axios.put(`/api/students/${studentId}`, { campusId })
+		.then(res => {
+			dispatch(addStudentToCampus(campusId, res.data));
+			dispatch(updateStudent(res.data));
+		})
 		.catch(err => console.error(err));
 };
 
 export const removeFromCampus = student => dispatch => {
+	const campusId = student.campusId;
 	student.campusId = null;
 	return axios.put(`/api/students/${student.id}`, student)
-		.then(() => dispatch(updateStudent(student)))
+		.then(() => {
+			dispatch(removeStudentFromCampus(campusId, student.id));
+			dispatch(updateStudent(student));
+		})
 		.catch(err => console.error(err));
 };
 

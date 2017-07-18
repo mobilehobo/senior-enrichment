@@ -18,13 +18,6 @@ class Routes extends Component {
 		this.props.getAllStudents();
 	}
 
-	componentWillUpdate(newProps) {
-		if (!_.isEqual(newProps.campuses, this.props.campuses) || !_.isEqual(newProps.students, this.props.students)) {
-			this.props.getAllCampuses();
-			this.props.getAllStudents();
-		}
-	}
-
 	render() {
 		return (
 			<Router>
